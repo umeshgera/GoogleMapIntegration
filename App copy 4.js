@@ -7,8 +7,7 @@ import {
 // import GlobalStyle from '../utils/GlobalStyle';
 import GlobalStyle from './src/utils/GlobalStyle';
 import MapView from 'react-native-maps';
-
-import Geolocation from 'react-native-geolocation-service';
+import GetLocation from 'react-native-get-location'
 
 export default function App({ route }) {
 
@@ -26,23 +25,29 @@ export default function App({ route }) {
     const [longitude, setLongitude] = useState(0)
 
     useEffect(() => {
-        Geolocation.getCurrentPosition(
-            (position) => {
-              console.log(position);
-              console.log(position.coords.latitude);
-              console.log(position.coords.longitude);
-
-              setLatitude(position.coords.latitude)
-              setLatitude(position.coords.longitude)
-              
-            },
-            (error) => {
-              // See error code charts below.
-              console.log(error.code, error.message);
-            },
-            { enableHighAccuracy: true, timeout: 15000, maximumAge: 10000 }
-        );
-    }, [])
+        GetLocation.getCurrentPosition({
+            enableHighAccuracy: true,
+            timeout: 20000,
+            maximumAge: 1000
+            // enableHighAccuracy: true,
+            // timeout: 15000,
+          })
+            .then(location => {
+              // "latitude": 28.3589971, "longitude": 77.2798445,
+              console.log(location);
+              console.log(location.latitude);
+              console.log(location.longitude);
+      
+              setLatitude(location.latitude )
+              setLongitude(location.longitude )
+      
+            })
+            .catch(error => {
+              const { code, message } = error;
+              console.warn(code, message);
+            })
+      
+    }, [latitude])
     
 
     return (
@@ -57,8 +62,8 @@ export default function App({ route }) {
             <MapView
                 style={styles.map}
                 initialRegion={{
-                    latitude: latitude,
-                    longitude: longitude,
+                    latitude: lat,
+                    longitude: lng,
                     latitudeDelta: 0.0922,
                     longitudeDelta: 0.0421,
                 }}
