@@ -9,7 +9,7 @@ import GlobalStyle from './src/utils/GlobalStyle';
 import MapView from 'react-native-maps';
 import GetLocation from 'react-native-get-location'
 
-export default function App({ route }) {
+export default function Map({ route }) {
 
     // const { city, lat, lng } = route.params;
 
